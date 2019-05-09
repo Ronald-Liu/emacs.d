@@ -1,0 +1,268 @@
+* Ido
+#+BEGIN_SRC emacs-lisp
+(require 'ido-completing-read+)
+(require 'flx-ido)
+
+(ido-mode t)
+(ido-everywhere t)
+(flx-ido-mode 1)
+
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
+(setq ido-use-filename-at-point nil)
+(setq ido-auto-merge-work-directories-length 0)
+;;(setq ido-use-virtual-buffers nil)
+(setq flx-ido-threshold 10000)
+(setq ido-default-buffer-method 'selected-window)
+
+(setq ido-ignore-buffers '("\\` " "^\*magit" "^\*Compile"
+                           "^\*Backtrace" "^\*Help" "^\*Ibuffer\*"
+                           "^\*Ido Completions" "^\*scratch"
+                           "^\*Messages" "^\*Kill Ring"
+                           "^\*HTTP Response" "^\*tramp/sshx"
+                           "^\*tramp/sudo" "^\*Completions"))
+#+END_SRC
+
+* SMex
+Smart M-x
+#+BEGIN_SRC emacs-lisp
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+#+END_SRC
+
+* GUI
+** Misc
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode t)
+(setq display-time-24hr-format t)
+(setq kill-ring-max 200)
+(setq inhibit-startup-message t)
+(setq major-mode 'text-mode)
+(show-paren-mode t)
+(setq frame-title-format "%f")
+(setq make-backup-files nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq require-final-newline t)
+(which-func-mode t)
+(blink-cursor-mode nil)
+(global-auto-revert-mode t)
+(delete-selection-mode t)
+(setq tab-always-indent 'complete)
+;; export PS1='\[\033[01;32m\]\u@\[\033[01;34m\]\w\[\033[00m\]\$ '
+;; (setq shell-file-nama "/bin/bash")
+(setq shell-file-name "/bin/zsh")
+(setq comint-process-echoes t)
+(setq default-fill-column 80)
+
+(setq mac-option-modifier 'meta
+      mac-command-modifier 'super
+      ns-function-modifier 'hyper)
+
+(when (display-graphic-p)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+#+END_SRC
+** Theme
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'custom-theme-load-path
+             (concat config-directory "site-lisp"))
+
+(load-theme 'monokai t)
+#+END_SRC
+
+** Tabs
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+#+END_SRC
+
+* Keybindings
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-j") 'newline-and-indent)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key "%" 'match-paren)
+(global-set-key (kbd "C-x c m") 'max-screen)
+(global-set-key (kbd "C-x c q") 'save-buffers-kill-terminal)
+(global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-; d") 'dired)
+(global-set-key (kbd "C-; y") 'browse-kill-ring)
+
+(setq mac-option-modifier 'super
+      mac-command-modifier 'meta
+      ns-function-modifier 'hyper)
+#+END_SRC
+
+* Smartparens
+Minor mode for Emacs that deals with parens pairs and tries to be smart about it.
+#+BEGIN_SRC emacs-lisp
+(smartparens-global-mode t)
+(defun disable-smartparens(mode)
+  (add-to-list 'sp-ignore-modes-list mode))
+#+END_SRC
+
+* Org-Mode
+** Keybind
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+
+** GTD
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files '("~/gtd/gtd.org.txt"
+                         "~/gtd/personal.org.txt"
+                         "~/gtd/main.org.txt"
+                         "~/gtd/learn.org.txt"
+                         "~/gtd/microapps.org.txt"
+                         "~/gtd/edn_rollout.org.txt"
+                         "~/gtd/tickler.org.txt"))
+(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+(setq org-agenda-custom-commands 
+      '(("o" "At the office" tags-todo "@office"
+         ((org-agenda-overriding-header "Office")))))
+#+END_SRC
+
+** File extension
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.org.txt\\'" . org-mode))
+#+END_SRC
+
+* Company
+Autocompletion
+#+BEGIN_SRC emacs-lisp
+(require 'company)
+(global-company-mode)
+(define-key company-active-map "\C-n" 'company-select-next)
+(define-key company-active-map "\C-p" 'company-select-previous)
+(setq company-idle-delay 0.1)
+#+END_SRC
+
+* iBuffer
+#+BEGIN_SRC emacs-lisp
+(require 'ibuffer-vc)
+(defun custom-ibuffer-view()
+  (ibuffer-vc-set-filter-groups-by-vc-root)
+  (unless (eq ibuffer-sorting-mode 'filename/process)
+    (ibuffer-do-sort-by-filename/process)))
+(defun ibuffer-setup()
+  (custom-ibuffer-view))
+(add-hook 'ibuffer-hook 'ibuffer-setup)
+
+(require 'ibuffer)
+(require 'ibuf-ext)
+(require 'tramp)
+(eval-when-compile
+  (require 'cl))
+
+(defun ibuffer-tramp-connection (buf)
+  "Return a cons cell (method . host), or nil if the file is not
+using a TRAMP connection"
+  (let ((file-name (with-current-buffer buf (or buffer-file-name default-directory))))
+    (when (tramp-tramp-file-p file-name)
+      (let ((method (tramp-file-name-method (tramp-dissect-file-name file-name)))
+      (host (tramp-file-name-host (tramp-dissect-file-name file-name))))
+  (cons method host)))))
+
+(defun ibuffer-tramp-generate-filter-groups-by-tramp-connection ()
+  "Create a set of ibuffer filter groups based on the TRAMP connection of buffers"
+  (let ((roots (ibuffer-remove-duplicates
+                (delq nil (mapcar 'ibuffer-tramp-connection (buffer-list))))))
+    (mapcar (lambda (tramp-connection)
+              (cons (format "%s:%s" (car tramp-connection) (cdr tramp-connection))
+                    `((tramp-connection . ,tramp-connection))))
+            roots)))
+
+(define-ibuffer-filter tramp-connection
+    "Toggle current view to buffers with TRAMP connection QUALIFIER."
+  (:description "TRAMP connection"
+                :reader (read-from-minibuffer "Filter by TRAMP connection (regexp): "))
+  (ibuffer-awhen (ibuffer-tramp-connection buf)
+    (equal qualifier it)))
+
+(defun ibuffer-tramp-set-filter-groups-by-tramp-connection ()
+  "Set the current filter groups to filter by TRAMP connection."
+  (interactive)
+  (setq ibuffer-filter-groups (ibuffer-tramp-generate-filter-groups-by-tramp-connection))
+  (ibuffer-update nil t))
+
+(add-hook 'ibuffer-hook
+   (lambda ()
+      (ibuffer-tramp-set-filter-groups-by-tramp-connection)
+      (ibuffer-do-sort-by-alphabetic)))
+#+END_SRC
+
+* TRAMP
+** Share control path with SSH
+#+BEGIN_SRC emacs-lisp
+(customize-set-variable
+           'tramp-ssh-controlmaster-options
+           (concat
+             "-o ControlPath=~/.ssh/controlpath-%%h-%%p-%%r "
+             "-o ControlMaster=auto -o ControlPersist=yes"))
+
+#+END_SRC
+
+* Language
+** Rust
+#+BEGIN_SRC emacs-lisp
+(setq rust-indent-offset 2)
+#+END_SRC
+
+** Typescript
+#+BEGIN_SRC emacs-lisp
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (setq typescript-indent-level 
+    (or (plist-get (tide-tsfmt-options) ':indentSize) 2))
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+;;(setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /Users/liurnd/tss.log"))
+(setq tide-tsserver-executable "/usr/local/bin/tsserver")
+(setq tide-node-executable "/usr/local/bin/node")
+#+END_SRC
+
+#+RESULTS:
+: /usr/local/bin/node
+
+** C
+#+BEGIN_SRC emacs-lisp
+(defun c-mode-common-hook-settings()
+  (setq c-basic-offset 2)
+  (hide-ifdef-mode t)
+  (setq fill-column 80))
+(add-hook 'c-mode-common-hook 'c-mode-common-hook-settings)
+#+END_SRC
+
+* GPG
+#+BEGIN_SRC emacs-lisp
+(require 'epa-file)
+(custom-set-variables '(epg-gpg-program  "/usr/local/bin/gpg"))
+(epa-file-enable)
+#+END_SRC
+
+* Misc
+#+BEGIN_SRC emacs-lisp
+(require 'browse-kill-ring)
+(require 'xcscope)
+(cscope-setup)
+(require 'expand-region)
+#+END_SRC
+
