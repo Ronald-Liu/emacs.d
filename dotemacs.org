@@ -78,6 +78,13 @@ Smart M-x
 (setq-default tab-width 2)
 #+END_SRC
 
+** Speedbar
+#+BEGIN_SRC emacs-lisp
+(setq speedbar-use-images nil)
+#+END_SRC 
+
+#+RESULTS:
+
 * Keybindings
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-j") 'newline-and-indent)
@@ -112,17 +119,25 @@ Minor mode for Emacs that deals with parens pairs and tries to be smart about it
 ** GTD
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-files '("~/gtd/gtd.org.txt"
-                         "~/gtd/personal.org.txt"
                          "~/gtd/main.org.txt"
                          "~/gtd/learn.org.txt"
                          "~/gtd/microapps.org.txt"
                          "~/gtd/edn_rollout.org.txt"
-                         "~/gtd/tickler.org.txt"))
+                         "~/gtd/tickler.org.txt"
+                         "~/personal_gtd/inbox.org"
+                         "~/personal_gtd/main.org"))
 (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 (setq org-agenda-custom-commands 
       '(("o" "At the office" tags-todo "@office"
          ((org-agenda-overriding-header "Office")))))
+
+(setq org-archive-location "~/personal_gtd/archive.org::** Finished Tasks")
+
 #+END_SRC
+
+#+RESULTS:
+: ~/personal_gtd/archive.org::** Finished Tasks
+
 
 ** File extension
 #+BEGIN_SRC emacs-lisp

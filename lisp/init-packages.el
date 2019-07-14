@@ -30,6 +30,7 @@
 (el-get-bundle inf-ruby)
 (el-get-bundle yari)
 (el-get-bundle htmlize)
+(el-get-bundle sr-speedbar)
 
 (require 'package)
 (add-to-list 'package-archives

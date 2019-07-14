@@ -8,6 +8,12 @@
 ;;; Code:
 
 
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+
 (setq config-directory (file-name-directory (file-truename load-file-name)))
 (message "config directory: %s" config-directory)
 (add-to-list 'load-path (concat config-directory "lisp"))
@@ -15,6 +21,8 @@
 (add-to-list 'load-path (concat config-directory "site-lisp"))
 
 (require 'init-packages)
+(package-initialize)
+
 (require 'init-utils)
 
 (custom-set-variables
