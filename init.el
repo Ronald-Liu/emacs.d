@@ -23,7 +23,7 @@
 ;; Initialize straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" config-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -59,6 +59,6 @@
 
 (org-babel-load-file "~/.emacs.d/dotemacs.org")
 (when (eq system-type 'darwin)
-  (org-babel-load-file "~/.emacs.d/mac.org"))
+  (org-babel-load-file "~/.emacs-google.d/mac.org"))
 (when (eq system-type 'gnu/linux)
   (org-babel-load-file "~/.emacs-google.d/linux.org"))

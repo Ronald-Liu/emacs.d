@@ -224,6 +224,8 @@ using a TRAMP connection"
 
 ** Rust
 #+BEGIN_SRC emacs-lisp
+(straight-use-package 'racer)
+
 (setq rust-indent-offset 2)
 (require 'rust-mode)
 (add-hook 'rust-mode-hook #'racer-mode)

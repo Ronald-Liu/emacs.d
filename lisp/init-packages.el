@@ -31,9 +31,7 @@
 (el-get-bundle yari)
 (el-get-bundle htmlize)
 (el-get-bundle sr-speedbar)
-(el-get-bundle haskell-mode)
 (el-get-bundle rust-mode)
-(el-get-bundle racer)
 
 ;; for lsp
 (el-get-bundle projectile)

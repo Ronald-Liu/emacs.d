@@ -1,5 +1,0 @@
-* Font
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist '(font . "Fira Mono-12" ))
-(set-face-attribute 'default t :font "Fira Mono-12" )
-#+END_SRC
