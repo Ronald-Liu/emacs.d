@@ -7,3 +7,6 @@ smex-items
 tramp
 dotemacs.el
 mac.el
+straight
+eshell
+network-security.data
