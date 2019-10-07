@@ -95,10 +95,14 @@ Smart M-x
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-; d") 'dired)
 (global-set-key (kbd "C-; y") 'browse-kill-ring)
-
+#+END_SRC
 (setq mac-option-modifier 'super
       mac-command-modifier 'meta
       ns-function-modifier 'hyper)
+** Switch Window
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'ace-window)
+(global-set-key (kbd "M-o") 'ace-window)
 #+END_SRC
 
 * Smartparens
@@ -116,27 +120,7 @@ Minor mode for Emacs that deals with parens pairs and tries to be smart about it
 (global-set-key (kbd "C-c c") 'org-capture)
 #+END_SRC
 
-** GTD
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-files '("~/gtd/gtd.org.txt"
-                         "~/gtd/main.org.txt"
-                         "~/gtd/learn.org.txt"
-                         "~/gtd/microapps.org.txt"
-                         "~/gtd/edn_rollout.org.txt"
-                         "~/gtd/tickler.org.txt"
-                         "~/personal_gtd/inbox.org"
-                         "~/personal_gtd/main.org"))
-(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-(setq org-agenda-custom-commands 
-      '(("o" "At the office" tags-todo "@office"
-         ((org-agenda-overriding-header "Office")))))
 
-(setq org-archive-location "~/personal_gtd/archive.org::** Finished Tasks")
-
-#+END_SRC
-
-#+RESULTS:
-: ~/personal_gtd/archive.org::** Finished Tasks
 
 
 ** File extension
@@ -224,6 +208,7 @@ using a TRAMP connection"
 
 ** Rust
 #+BEGIN_SRC emacs-lisp
+
 (straight-use-package 'racer)
 
 (setq rust-indent-offset 2)
@@ -284,19 +269,13 @@ using a TRAMP connection"
 
 
 ** Java
-*** Patch lsp-java for tcp support
--#+BEGIN_SRC emacs-lisp
-(straight-use-package 'el-patch)
-(straight-use-package 'lsp-mode)
-(straight-use-package 'lsp-java)
-
-(el-patch-feature lsp-java)
-
-(with-eval-after-load 'lsp-java
-  (el-patch-defun lsp-java--ls-command ()
-    "LS startup command."
-    "nc localhost 5800"))
--#+END_SRC
+*** string-inflection
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'string-inflection)
+(add-hook 'java-mode-hook
+            '(lambda ()
+               (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+#+END_SRC
 
 * GPG
 #+BEGIN_SRC emacs-lisp
