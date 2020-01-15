@@ -17,7 +17,6 @@
 (setq config-directory (file-name-directory (file-truename load-file-name)))
 (message "config directory: %s" config-directory)
 (add-to-list 'load-path (concat config-directory "lisp"))
-(add-to-list 'load-path (concat config-directory "/el-get/el-get"))
 (add-to-list 'load-path (concat config-directory "site-lisp"))
 
 ;; Initialize straight.el
@@ -34,13 +33,20 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(require 'init-packages)
+(require 'package)
 (package-initialize)
 
 (require 'init-utils)
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(epg-gpg-program "/usr/local/bin/gpg")
+ '(google3-eglot-enabled-modes
+   (quote
+    (c++-mode go-mode protobuf-mode protobuffer-mode java-mode google3-build-mode python-mode)))
  '(inhibit-startup-screen t)
  '(org-babel-shell-names
    (quote
@@ -48,14 +54,16 @@
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa-stable" . "http://stable.melpa.org/packages/")))))
+     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(tramp-ssh-controlmaster-options
+   "-o ControlPath=~/.ssh/controlpath-%%h-%%p-%%r -o ControlMaster=auto -o ControlPersist=yes" t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(lsp-ui-sideline-code-action ((t (:foreground "LemonChiffon1")))))
 
 (org-babel-load-file "~/.emacs.d/dotemacs.org")
 (when (eq system-type 'darwin)
