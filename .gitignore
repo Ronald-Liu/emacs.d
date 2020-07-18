@@ -10,3 +10,5 @@ mac.el
 straight
 eshell
 network-security.data
+.lsp-session-v1
+projectile-bookmarks.eld

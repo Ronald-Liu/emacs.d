@@ -45,16 +45,12 @@
  ;; If there is more than one, they won't work right.
  '(epg-gpg-program "/usr/local/bin/gpg")
  '(google3-eglot-enabled-modes
-   (quote
-    (c++-mode go-mode protobuf-mode protobuffer-mode java-mode google3-build-mode python-mode)))
+   '(c++-mode go-mode protobuf-mode protobuffer-mode java-mode google3-build-mode python-mode))
  '(inhibit-startup-screen t)
- '(org-babel-shell-names
-   (quote
-    ("sh" "bash" "csh" "ash" "ksh" "mksh" "posh" "fish")))
+ '(org-babel-shell-names '("sh" "bash" "csh" "ash" "ksh" "mksh" "posh" "fish"))
  '(package-archives
-   (quote
-    (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+   '(("gnu" . "http://elpa.gnu.org/packages/")
+     ("melpa-stable" . "http://stable.melpa.org/packages/")))
  '(tramp-ssh-controlmaster-options
    "-o ControlPath=~/.ssh/controlpath-%%h-%%p-%%r -o ControlMaster=auto -o ControlPersist=yes" t))
 
