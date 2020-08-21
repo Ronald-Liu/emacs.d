@@ -1,5 +1,6 @@
 * Packages
 #+BEGIN_SRC emacs-lisp
+(straight-use-package 'use-package)
 (straight-use-package 'smex)
 (straight-use-package 'magit)
 (straight-use-package 'smartparens)
@@ -132,6 +133,9 @@ Smart M-x
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 #+END_SRC
 
+#+RESULTS:
+: ((font . Fira Mono-12) (ns-transparent-titlebar . t) (vertical-scroll-bars) (fullscreen . maximized))
+
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ** Tabs
@@ -158,6 +162,27 @@ Smart M-x
 #+BEGIN_SRC emacs-lisp
 (setq speedbar-use-images nil)
 #+END_SRC 
+** Which key
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'which-key)
+(require 'which-key)
+(which-key-setup-side-window-right)
+(setq which-key-show-early-on-C-h t)
+(setq which-key-idle-delay 10000)
+(setq which-key-idle-secondary-delay 0.05)
+(which-key-mode)
+#+END_SRC 
+
+** Modeline
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'doom-modeline)
+(require 'doom-modeline)
+(doom-modeline-mode 1)
+#+END_SRC 
+
+#+RESULTS:
+: t
 
 * Keybindings
 #+BEGIN_SRC emacs-lisp
@@ -269,6 +294,30 @@ Minor mode for Emacs that deals with parens pairs and tries to be smart about it
 (require 'org-download)
 #+END_SRC
 
+** Org-Roam
+#+BEGIN_SRC emacs-lisp
+(use-package org-roam
+      :straight t
+      :hook
+      (after-init . org-roam-mode)
+
+      :custom
+      (org-roam-directory "~/liurnd-personal/org/roam")
+      (org-roam-index-file "~/liurnd-personal/org/index.org")
+      :bind (:map org-roam-mode-map
+              (("C-c m d ." . org-roam-dailies-today)
+               ("C-c m d d" . org-roam-dailies-date)
+               ("C-c m d n" . org-roam-dailies-tomorrow)
+               ("C-c m l" . org-roam)
+               ("C-c m f" . org-roam-find-file)
+               ("C-c m g" . org-roam-graph-show))
+              :map org-mode-map
+              (("C-c m i" . org-roam-insert))
+              (("M-n" . org-next-link))
+              (("M-p" . org-previous-link))
+              (("C-c m I" . org-roam-insert-immediate))))
+#+END_SRC
+
 * Company
 Autocompletion
 #+BEGIN_SRC emacs-lisp
@@ -353,7 +402,7 @@ using a TRAMP connection"
 #+END_SRC
 
 * Projectile
--#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (straight-use-package 'projectile)
 (require 'projectile)
 (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
@@ -367,7 +416,10 @@ using a TRAMP connection"
 ;;(setq projectile-indexing-method 'native)
 ;;(setq projectile-project-root-files-functions '(projectile-root-local))
 ;;(setq-local projectile-project-root "/google/src/cloud/liurnd/f0/google3/nbu/paisa/gpay/app/")
--#+END_SRC
+#+END_SRC
+
+#+RESULTS:
+| BUILD | .projectile_gpay | .svn | CVS | Makefile |
 
 
 * Language
@@ -440,6 +492,8 @@ Folding
 (setq lsp-dart-test-code-lens nil)
 (setq lsp-dart-suggest-from-unimported-libraries nil)
 #+END_SRC
+
+#+RESULTS:
 
 *** Folding 
 #+BEGIN_SRC emacs-lisp
@@ -648,8 +702,9 @@ Folding
 
 * yasnippets
 #+BEGIN_SRC emacs-lisp
-  (straight-use-package 'yasnippet)
-  (yas-global-mode 1)
+
+;(straight-use-package 'yasnippet)
+;  (yas-global-mode 1)
 ;  (setq yas-snippet-dirs '(
 ;                           "~/.emacs-google.d/snippets/"
 ;                           "~/.emacs.d/snippets/"
