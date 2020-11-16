@@ -78,6 +78,15 @@ Smart M-x
 -#+END_SRC
 
 * GUI
+** vterm
+#+BEGIN_SRC emacs-lisp
+(use-package vterm
+      :straight t)
+#+END_SRC
+
+#+RESULTS:
+: t
+
 ** Misc
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode t)
@@ -108,7 +117,10 @@ Smart M-x
 (when (display-graphic-p)
   (tool-bar-mode -1)
   (scroll-bar-mode -1))
+
+(setq enable-remote-dir-locals t)
 #+END_SRC
+
 ** Theme
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'custom-theme-load-path
@@ -116,7 +128,7 @@ Smart M-x
 (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/"))
 (straight-use-package 'doom-themes)
 (require 'all-the-icons)
-(load-theme 'doom-nord-light t)
+(load-theme 'doom-one t)
 
 ;; Enable flashing mode-line on errors
 (doom-themes-visual-bell-config)
@@ -134,7 +146,7 @@ Smart M-x
 #+END_SRC
 
 #+RESULTS:
-: ((font . Fira Mono-12) (ns-transparent-titlebar . t) (vertical-scroll-bars) (fullscreen . maximized))
+: ((font . Fira Mono-12) (ns-transparent-titlebar . t) (vertical-scroll-bars))
 
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
@@ -176,13 +188,22 @@ Smart M-x
 
 ** Modeline
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'doom-modeline)
-(require 'doom-modeline)
-(doom-modeline-mode 1)
+;(straight-use-package 'doom-modeline)
+;(require 'doom-modeline)
+;(doom-modeline-mode 1)
 #+END_SRC 
 
-#+RESULTS:
-: t
+** Exec-path for MacOS
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+      :straight t
+      :if (memq window-system '(mac ns x))
+      :config
+      (setq exec-path-from-shell-shell-name "/usr/local/bin/fish")
+      (setq exec-path-from-shell-variables '("PATH" "GOPATH"))
+      (exec-path-from-shell-initialize))
+#+END_SRC 
+
 
 * Keybindings
 #+BEGIN_SRC emacs-lisp
@@ -208,6 +229,8 @@ Smart M-x
 #+BEGIN_SRC emacs-lisp
 (straight-use-package 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
+(setq aw-dispatch-always t)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 #+END_SRC
 
 * Smartparens
@@ -313,9 +336,26 @@ Minor mode for Emacs that deals with parens pairs and tries to be smart about it
                ("C-c m g" . org-roam-graph-show))
               :map org-mode-map
               (("C-c m i" . org-roam-insert))
+              (("C-c l s" . org-store-link))
+              (("C-c l i" . org-insert-link))
               (("M-n" . org-next-link))
               (("M-p" . org-previous-link))
               (("C-c m I" . org-roam-insert-immediate))))
+
+(use-package org-roam-server
+  :straight t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
 #+END_SRC
 
 * Company
@@ -429,7 +469,11 @@ Folding
 (straight-use-package 'origami)
 (require 'origami)
 #+END_SRC
-
+** Fish
+#+BEGIN_SRC emacs-lisp
+(use-package fish-mode
+      :straight t)
+#+END_SRC
 
 ** LSP-Mode
 #+BEGIN_SRC emacs-lisp
@@ -467,7 +511,7 @@ Folding
 
 (setq lsp-prefer-capf t)
 
-(setq lsp-idle-delay 1.500)
+(setq lsp-idle-delay 0.500)
 (setq lsp-ui-doc-enable nil)
 (setq lsp-ui-doc-position 'bottom)
 (setq lsp-ui-doc-use-webkit t)
@@ -491,6 +535,7 @@ Folding
 (setq lsp-dart-main-code-lens nil)
 (setq lsp-dart-test-code-lens nil)
 (setq lsp-dart-suggest-from-unimported-libraries nil)
+(setq lsp-enable-file-watchers nil)
 #+END_SRC
 
 #+RESULTS:
@@ -721,3 +766,14 @@ Folding
 (setq gc-cons-threshold 1000000000)
 (setq read-process-output-max (* 10240 1024))
 #+END_SRC
+
+* Workgroup2
+-#+BEGIN_SRC emacs-lisp
+(use-package workgroups2
+      :straight t
+      :custom
+      (wg-prefix-key (kbd "C-c z"))
+)
+(workgroups-mode 1)
+-#+END_SRC
+

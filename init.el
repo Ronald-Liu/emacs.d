@@ -51,6 +51,9 @@
  '(package-archives
    '(("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa-stable" . "http://stable.melpa.org/packages/")))
+ '(safe-local-variable-values
+   '((eval setq-local org-roam-directory
+           (expand-file-name "./"))))
  '(tramp-ssh-controlmaster-options
    "-o ControlPath=~/.ssh/controlpath-%%h-%%p-%%r -o ControlMaster=auto -o ControlPersist=yes" t))
 
